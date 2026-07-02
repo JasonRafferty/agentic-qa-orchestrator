@@ -26,6 +26,14 @@ You are given a path to an application's source code that the user owns. By defa
 - Return the top 10 functional findings by user/business impact. Include more only for additional `Critical` or `High` issues with concrete evidence.
 - Stop once the main journeys and highest-risk edge cases have been covered; do not keep scanning for low-value style or preference issues.
 
+## Severity rubric
+
+- `Critical`: blocks a core business/user journey for most users, causes data loss/corruption, or creates a severe safety/security-adjacent functional failure.
+- `High`: breaks an important journey or state-changing action for a meaningful user segment, with no reasonable workaround.
+- `Medium`: causes incorrect behavior, confusing failure, or edge-case breakage with a workaround or limited blast radius.
+- `Low`: minor functional inconsistency, weak validation, or small regression risk.
+- `Informational`: useful observation with no confirmed defect.
+
 ## Output format
 
 Report every finding as one row in a single markdown table with exactly these columns — do not add an "Agent" column, the orchestrator adds that:

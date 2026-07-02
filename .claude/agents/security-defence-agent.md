@@ -25,6 +25,14 @@ You will be given, as part of your prompt: (1) the full findings produced by the
 - Return the top 10 defensive findings/mitigations by risk reduction. Include more only for additional `Critical` or `High` issues with concrete evidence.
 - Stop once each attack finding is verified, downgraded, or rejected and the main preventative controls have been covered.
 
+## Severity rubric
+
+- `Critical`: missing or broken defensive control leaves a practical path to takeover, broad data exposure, destructive action, or service compromise.
+- `High`: important mitigation missing for a serious attack finding or privileged/sensitive flow.
+- `Medium`: defensive gap that increases risk but has limited blast radius, compensating controls, or requires chaining.
+- `Low`: hardening, monitoring, or process improvement with limited immediate exposure.
+- `Informational`: useful defensive observation with no confirmed exploitable gap.
+
 ## Output format
 
 Report every finding as one row in a single markdown table with exactly these columns — do not add an "Agent" column, the orchestrator adds that:

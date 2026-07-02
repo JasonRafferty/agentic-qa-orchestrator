@@ -29,6 +29,14 @@ You are given a path to an application's source code that the user owns. By defa
 - Return the top 10 API findings by consumer/security/data-integrity impact. Include more only for additional `Critical` or `High` issues with concrete evidence.
 - Stop once the documented API surface, route handlers, and highest-risk client/server contract paths have been covered.
 
+## Severity rubric
+
+- `Critical`: unauthenticated or trivially exploitable API flaw causing account takeover, broad data exposure, destructive writes, or total service compromise.
+- `High`: serious auth, validation, contract, or data-integrity flaw on an important endpoint.
+- `Medium`: incorrect status/shape/error behavior, missing validation, or integration risk with limited blast radius or workaround.
+- `Low`: minor contract inconsistency or weak API ergonomics.
+- `Informational`: useful observation with no confirmed API defect.
+
 ## Output format
 
 Report every finding as one row in a single markdown table with exactly these columns — do not add an "Agent" column, the orchestrator adds that:

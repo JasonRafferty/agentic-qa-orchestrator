@@ -28,6 +28,14 @@ You are given a path to an application's source code that the user owns. By defa
 - Return the top 10 non-functional findings by likely production impact. Include more only for additional `Critical` or `High` issues with concrete evidence.
 - Stop once the major app surfaces and highest-risk non-functional categories have been covered; do not keep scanning for cosmetic or preference-level concerns.
 
+## Severity rubric
+
+- `Critical`: likely outage, severe accessibility blocker, major data/reliability risk, or performance failure that makes the app unusable for most users.
+- `High`: serious performance, accessibility, reliability, scalability, or maintainability risk on a core path with no easy workaround.
+- `Medium`: meaningful non-functional degradation with limited blast radius or a reasonable workaround.
+- `Low`: minor polish, maintainability, compatibility, or usability issue.
+- `Informational`: useful observation with no confirmed quality risk.
+
 ## Output format
 
 Report every finding as one row in a single markdown table with exactly these columns — do not add an "Agent" column, the orchestrator adds that:

@@ -53,13 +53,19 @@ These two have a real dependency and must not run in parallel:
 
 ## Step 4 — Merge and prioritise
 
-Each specialist returns a 7-column markdown table (`Severity | Confidence | Issue | Impact | Evidence | How to Replicate | Recommendation`). Combine them into one list, then:
+Each specialist returns an 8-column markdown table (`ID | Severity | Confidence | Issue | Impact | Evidence | How to Replicate | Recommendation`). Combine them into one list, then:
 
 1. **Tag** each row with the agent(s) that produced it, using these exact display names: `Functional Testing Agent`, `Non Functional Testing Agent`, `API Testing Agent`, `GDPR and Compliance Agent`, `Database Testing Agent`, `Security Attack Agent`, `Security Defence Agent`.
-2. **Deduplicate**: if two rows describe the same underlying root cause/location (e.g. the API agent and the Security Attack agent both flag the same missing input validation), merge them into one row. Combine their Impact/Recommendation text if each adds distinct value, and join their names in the Agent column with " + ".
-3. **Normalise severity**: every row must use exactly one of `Critical`, `High`, `Medium`, `Low`, `Informational`. Fix inconsistent wording from subagents.
-4. **Sort** rows by severity, highest first: `Critical` → `High` → `Medium` → `Low` → `Informational`.
-5. Drop pure "nothing found" `Informational` rows from agents that had no real findings, unless the total finding count would otherwise be zero (in that case keep one, so the report isn't empty).
+2. **Deduplicate**: first merge rows with the same `ID`. If IDs differ but two rows describe the same underlying root cause/location (e.g. the API agent and the Security Attack agent both flag the same missing input validation), merge them into one row and keep the clearest/stablest ID. If an ID is missing or malformed, synthesize one from `category + location + root cause` before deduplication. Combine their Impact/Recommendation text if each adds distinct value, and join their names in the Agent column with " + ".
+3. **Normalise severity**: every row must use exactly one of `Critical`, `High`, `Medium`, `Low`, `Informational`. Fix inconsistent wording from subagents. If you change a finding's severity from what a specialist assigned it (e.g. during dedup/merge, or your own judgement call), say so explicitly in that row's Impact text (e.g. "originally rated X by the Y agent; normalised to Z here because ...") so the change is traceable rather than silent.
+4. **Normalise confidence**: every row must use exactly one of `High`, `Medium`, `Low`. Use `High` for directly verified or strongly evidenced code paths, `Medium` for clear static evidence without runtime verification, and `Low` for plausible but indirect findings that still have concrete code evidence.
+5. **Sort** rows by severity, highest first: `Critical` → `High` → `Medium` → `Low` → `Informational`; within a severity, sort by confidence `High` → `Medium` → `Low`.
+6. Drop pure "nothing found" `Informational` rows from agents that had no real findings, unless the total finding count would otherwise be zero (in that case keep one, so the report isn't empty).
+7. **Validate the Evidence cell** for every row, separate from Impact and How to Replicate: it must be a short, concrete statement of what was actually observed/verified, not instructions. If a specialist omits Evidence or only says "confirmed live" / "tested live" / "reproduced against the running instance", fill or expand it with the specific observed proof from the finding text (e.g. the actual response header, status code, or command output that was seen). If a finding is static-analysis-only (no dynamic testing performed), the Evidence cell must say so plainly, e.g. "Static analysis only — not dynamically tested; based on reading `file.py:12-34`." Never leave this cell vague or absent.
+7. **Rewrite How to Replicate as numbered, step-by-step instructions a QA tester could follow through the application's own user interface** (web UI or mobile app screens) wherever a UI path exists — describe concrete on-screen actions (which screen, which button/field, what to type/tap) rather than raw API/database commands, so someone without engineering tooling can reproduce and confirm the issue themselves (`1. ... 2. ... 3. ...`, ending in the expected/observed result). If the application ships as both a website and a wrapped mobile app (e.g. via Capacitor/React Native/Cordova) sharing the same backend, note the mobile-app path too whenever it differs from the web path, since QA needs to test both.
+   - Prefer the actual app UI first. If an issue can only be observed or triggered via the browser's built-in developer tools (Network tab request-editing/"Edit and Resend", Application/Storage tab, Console) rather than a pure UI click-path, that still counts as "testable on the website" — describe it precisely (which devtools panel, what to change, what to look for) rather than reaching for external tools like curl/Postman/a database client.
+   - Only fall back to raw API calls or direct database access when there is truly no way to trigger or observe the issue through the app or browser devtools (e.g. an attack that requires writing directly to the database). In that case say so explicitly at the start of the cell (e.g. "No in-app reproduction exists for this issue — it requires direct database/API access.") and, where possible, add a secondary step a QA tester *can* do in-app once an engineer has done the initial setup (e.g. "once you have a forged session token from engineering, paste it into Local Storage in the browser and confirm the app logs you straight in as that user without ever showing the sign-in screen").
+   - Always include concrete inputs (exact screen names, field values, or payloads used) and the expected/observed result as the final step.
 
 ## Step 5 — Build the HTML report
 
@@ -77,6 +83,7 @@ Each specialist returns a 7-column markdown table (`Severity | Confidence | Issu
      <tr class="critical">
        <td><span class="badge critical">Critical</span></td>
        <td class="confidence">High</td>
+       <td class="finding-id">security-admin-idor</td>
        <td class="agent">Security Attack Agent</td>
        <td class="issue">...</td>
        <td class="impact">...</td>
@@ -86,7 +93,7 @@ Each specialist returns a 7-column markdown table (`Severity | Confidence | Issu
      </tr>
      ```
      (severity class/badge text must be lowercase for the CSS class, e.g. `informational`, and Title Case for the visible badge label. Add a second class `static` to the evidence `<td>`, e.g. `<td class="evidence static">`, when that row's Evidence cell says "static analysis only" — this dims/italicises it visually per the template CSS so live-verified rows stand out.)
-   - **HTML-escape every piece of dynamic text before inserting it** — this includes `{{APP_NAME}}`, `{{APP_PATH}}`, `{{EXEC_SUMMARY}}`, and every cell of every finding row (Issue, Impact, Evidence, Confidence, How to Replicate, Recommendation). Specialist findings routinely contain literal `<`, `>`, `&`, or `"` (e.g. describing an unescaped `<script>` payload) — replace `&` → `&amp;`, `<` → `&lt;`, `>` → `&gt;`, `"` → `&quot;` in that order before writing the value into the HTML. Never let a finding's text be interpreted as markup.
+   - **HTML-escape every piece of dynamic text before inserting it** — this includes `{{APP_NAME}}`, `{{APP_PATH}}`, `{{EXEC_SUMMARY}}`, and every cell of every finding row (ID, Issue, Impact, Evidence, Confidence, How to Replicate, Recommendation). Specialist findings routinely contain literal `<`, `>`, `&`, or `"` (e.g. describing an unescaped `<script>` payload) — replace `&` → `&amp;`, `<` → `&lt;`, `>` → `&gt;`, `"` → `&quot;` in that order before writing the value into the HTML. Never let a finding's text be interpreted as markup.
 3. Write the completed HTML to `reports/<YYYY-MM-DD>_<app-name-kebab-case>.html` (relative to this project's root). The `reports/` folder already exists. If a file with that exact name already exists (e.g. a second run against the same app on the same day), do not overwrite it — append `_2`, `_3`, etc. (or an `HH-MM` time suffix) before the `.html` extension to get a free filename, and mention the disambiguated name back to the user in Step 6.
 
 ## Step 6 — Report back to the user

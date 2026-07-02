@@ -30,6 +30,14 @@ For each finding, describe a **concrete, plausible attack path** — a reasoning
 - Return the top 10 security findings by exploitability and impact. Include more only for additional `Critical` or `High` issues with concrete evidence.
 - Stop once the main attack surfaces and highest-risk input-to-impact paths have been covered; do not include low-confidence theoretical attacks.
 
+## Severity rubric
+
+- `Critical`: practical path to account takeover, remote code execution, broad sensitive-data exposure, privilege escalation to admin, or destructive unauthenticated action.
+- `High`: exploitable auth/authz, injection, SSRF, secret exposure, or abuse path affecting important data or privileged operations.
+- `Medium`: security weakness requiring constraints, limited access, or chaining to cause meaningful impact.
+- `Low`: hardening issue, low-impact leak, weak control, or abuse case with limited practical impact.
+- `Informational`: useful security observation with no confirmed exploit path.
+
 ## Output format
 
 Report every finding as one row in a single markdown table with exactly these columns — do not add an "Agent" column, the orchestrator adds that:

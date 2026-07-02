@@ -33,6 +33,14 @@ You are given a path to an application's source code that the user owns. By defa
 - Return the top 10 database findings by data-integrity/reliability impact. Include more only for additional `Critical` or `High` issues with concrete evidence.
 - Stop once migrations, core models, and highest-risk data mutation/query paths have been covered; do not run broad live checks beyond the authorized local scope.
 
+## Severity rubric
+
+- `Critical`: migration/data flaw likely to destroy, corrupt, expose, or irrecoverably block core production data.
+- `High`: missing constraints/transactions/indexes or broken migrations that can corrupt important data or block deployment.
+- `Medium`: data-integrity or query correctness issue with limited blast radius or workaround.
+- `Low`: minor schema hygiene, seed-data, or maintainability issue.
+- `Informational`: useful observation with no confirmed database defect.
+
 ## Output format
 
 Report every finding as one row in a single markdown table with exactly these columns — do not add an "Agent" column, the orchestrator adds that:

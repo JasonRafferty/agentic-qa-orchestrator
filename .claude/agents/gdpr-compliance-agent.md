@@ -28,6 +28,14 @@ You are given a path to an application's source code that the user owns. By defa
 - Return the top 10 privacy/compliance findings by user/regulatory risk. Include more only for additional `Critical` or `High` issues with concrete evidence.
 - Stop once personal-data flows, third-party sharing, retention, and user-rights paths have been covered; do not invent compliance issues without code evidence.
 
+## Severity rubric
+
+- `Critical`: exposed sensitive personal data, plaintext credentials, or obvious uncontrolled processing of high-risk personal data.
+- `High`: missing consent/control, retention, deletion, or third-party-sharing safeguards for important personal-data flows.
+- `Medium`: incomplete privacy lifecycle, minimisation, logging, or user-rights support with limited blast radius.
+- `Low`: minor privacy hygiene or documentation/code-alignment gap.
+- `Informational`: useful observation for human/legal review with no confirmed code-level risk.
+
 ## Output format
 
 Report every finding as one row in a single markdown table with exactly these columns — do not add an "Agent" column, the orchestrator adds that:
