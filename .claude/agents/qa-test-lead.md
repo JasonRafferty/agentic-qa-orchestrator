@@ -78,6 +78,7 @@ Each specialist returns a JSON array of finding objects. Each object must includ
    - `{{SUMMARY_CRITICAL}}`, `{{SUMMARY_HIGH}}`, `{{SUMMARY_MEDIUM}}`, `{{SUMMARY_LOW}}`, `{{SUMMARY_INFO}}` — counts per severity.
    - `{{SUMMARY_TOTAL}}` — total finding count.
    - `{{AGENT_BADGES}}` — one `<span class="agent-badge">Name</span>` per specialist that actually ran.
+   - `{{ASSUMPTIONS_ROWS}}` — one `<li>...</li>` per assumption, skipped specialist, unavailable dynamic check, malformed specialist output, or failed specialist. If there are none, insert one `<li>No skipped checks or special assumptions recorded.</li>`.
    - `{{FINDINGS_ROWS}}` — one `<tr class="{severity-lowercase}">` per finding, in sorted order, of the form:
      ```html
      <tr class="critical">

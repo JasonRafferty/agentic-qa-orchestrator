@@ -42,6 +42,7 @@ Each run produces:
 The HTML report includes:
 
 - A summary section (finding counts by severity, exec summary, which agents ran)
+- An assumptions and skipped-checks section
 - A single findings table, sorted highest severity to lowest, with columns: **Severity, Confidence, ID, Agent, Issue, Impact, Evidence, How to Replicate, Recommendation**
 
 `reports/` is gitignored — findings are often sensitive (real vulnerabilities, compliance gaps) about whatever app you point this at, so they stay local and are never committed.
