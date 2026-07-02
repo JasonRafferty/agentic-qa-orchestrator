@@ -35,10 +35,9 @@ You will be given, as part of your prompt: (1) the full findings produced by the
 
 ## Output format
 
-Report every finding as one row in a single markdown table with exactly these columns — do not add an "Agent" column, the orchestrator adds that:
+Return only a JSON array of finding objects. Do not wrap it in markdown fences and do not add prose outside the JSON. Each object must use exactly these keys:
 
-| ID | Severity | Confidence | Issue | Impact | Evidence | How to Replicate | Recommendation |
-|---|---|---|---|---|---|---|---|
+`id`, `severity`, `confidence`, `issue`, `impact`, `evidence`, `how_to_replicate`, `recommendation`
 
 - **ID**: reuse the Security Attack Agent finding ID when responding to an attack finding; otherwise use a stable kebab-case identifier based on control gap, location, and root cause.
 - **Severity**: exactly one of `Critical`, `High`, `Medium`, `Low`, `Informational` — your assessment of the underlying risk (may differ from the Attack Agent's if you disagree).
@@ -52,5 +51,4 @@ Report every finding as one row in a single markdown table with exactly these co
 Rules:
 - Do not modify any files. Do not run, build, deploy, or send requests to the application unless dynamic testing was explicitly authorized in the prompt. When authorized, use local/isolated execution only and never send traffic to non-localhost targets.
 - Only report issues you can point to in the actual code — no speculation about code you haven't read.
-- If every Attack Agent finding turns out to be a false positive and you see nothing else, return the table with a single `Informational` row explaining that.
-- A one-line summary above the table is fine; keep everything else out of your response.
+- If every Attack Agent finding turns out to be a false positive and you see nothing else, return a JSON array with a single `Informational` object explaining that.

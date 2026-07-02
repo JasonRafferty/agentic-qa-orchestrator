@@ -43,10 +43,9 @@ You are given a path to an application's source code that the user owns. By defa
 
 ## Output format
 
-Report every finding as one row in a single markdown table with exactly these columns — do not add an "Agent" column, the orchestrator adds that:
+Return only a JSON array of finding objects. Do not wrap it in markdown fences and do not add prose outside the JSON. Each object must use exactly these keys:
 
-| ID | Severity | Confidence | Issue | Impact | Evidence | How to Replicate | Recommendation |
-|---|---|---|---|---|---|---|---|
+`id`, `severity`, `confidence`, `issue`, `impact`, `evidence`, `how_to_replicate`, `recommendation`
 
 - **ID**: stable kebab-case identifier based on category, migration/model/query, and root cause (for example `db-orders-missing-foreign-key`).
 - **Severity**: exactly one of `Critical`, `High`, `Medium`, `Low`, `Informational`.
@@ -63,5 +62,4 @@ Rules:
 - Always tear down any container/network/volume you create before finishing, even if the review fails partway through.
 - If dynamic testing is not authorized or Docker is unavailable, say so in a single `Informational` row and fall back to static review only — do not fail the whole review.
 - Only report issues you can point to in the actual code or actual command output — no speculation.
-- If you find nothing notable, return the table with a single `Informational` row describing what you checked and that no issues were found.
-- A one-line summary above the table is fine; keep everything else out of your response.
+- If you find nothing notable, return a JSON array with a single `Informational` object describing what you checked and that no issues were found.

@@ -22,10 +22,9 @@ You are the **Your Agent Display Name**, a QA specialist focused on ...
 
 ## Output format
 
-Report every finding as one row in a single markdown table with exactly these columns — do not add an "Agent" column, the orchestrator adds that:
+Return only a JSON array of finding objects. Do not wrap it in markdown fences and do not add prose outside the JSON. Each object must use exactly these keys:
 
-| ID | Severity | Confidence | Issue | Impact | Evidence | How to Replicate | Recommendation |
-|---|---|---|---|---|---|---|---|
+`id`, `severity`, `confidence`, `issue`, `impact`, `evidence`, `how_to_replicate`, `recommendation`
 
 - **ID**: stable kebab-case identifier based on category, location, and root cause.
 - **Severity**: exactly one of `Critical`, `High`, `Medium`, `Low`, `Informational`.
@@ -44,7 +43,7 @@ Rules:
 - If you find nothing notable, return a single `Informational` row saying so.
 ```
 
-Keep the output format section identical across agents — the QA Test Lead depends on that exact 8-column table shape to merge everything into the final report.
+Keep the output format section identical across agents — the QA Test Lead depends on that exact JSON shape to merge everything into the final report.
 
 ## 2. Wire it into the QA Test Lead
 
