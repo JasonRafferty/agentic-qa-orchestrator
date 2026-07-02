@@ -22,6 +22,7 @@ Create a compact **Discovery Packet** and pass it unchanged to every specialist.
 - `stack`: detected languages/frameworks/runtime/package managers.
 - `entrypoints`: likely app/server/client entry files and run instructions, if obvious.
 - `surfaces`: detected UI, API, background jobs, CLI, mobile wrapper, database, auth, payments, file upload, notifications, or admin areas.
+- `mobile_signals`: detected mobile indicators, if any (for example React Native, Expo, Flutter, Capacitor, Cordova/Ionic, native Android/iOS folders, AndroidManifest.xml, Info.plist, WebView wrapper, deep links, push notifications, app store/mobile config, or mobile-specific docs).
 - `key_paths`: important directories/files for routes, components, models, migrations, tests, config, and docs.
 - `available_specs`: README sections, OpenAPI/GraphQL schemas, test files, fixtures, sample env files, or product docs found.
 - `skip_hints`: areas that appear absent (for example "no API routes found" or "no database migrations found") so specialists can narrow their work.
@@ -35,6 +36,7 @@ Use the Discovery Packet to decide which independent specialists need a full run
 - Run `api-testing-agent` only when API routes, RPC handlers, GraphQL schemas, client API calls, webhooks, or service integrations are present.
 - Run `gdpr-compliance-agent` only when the app appears to collect, store, process, log, or send personal data, analytics identifiers, auth data, payment data, or user-generated content.
 - Run `database-testing-agent` only when models, migrations, schemas, seed files, repository/query code, or database configuration are present.
+- Run `mobile-testing-agent` only when the target has a mobile surface or wrapper: React Native, Expo, Flutter, Capacitor, Cordova/Ionic, native Android/iOS, WebView wrapper, mobile deep links, push notifications, app store/mobile config, `AndroidManifest.xml`, `Info.plist`, or mobile-specific docs. If the app is a web app wrapped for mobile, explicitly tell the mobile agent to focus on realistic Android/iOS behavior, WebView storage, external links, app/proxy request tampering, token/session handling, permissions, offline/resume behavior, and mobile UX/reliability.
 
 In a single message, call the `Agent` tool for each independent specialist that should run, each given the same target path, the dynamic-testing authorization status, and the full Discovery Packet. If a specialist is relevant but the surface is narrow, say exactly what to focus on. If dynamic testing was not explicitly authorized, instruct them to stay static/read-only. If dynamic testing was authorized, instruct them to use isolated local execution/localhost traffic only and to fall back to static analysis when the app cannot be run safely. Track skipped specialists and the reason for each skip for the final report:
 
@@ -43,6 +45,7 @@ In a single message, call the `Agent` tool for each independent specialist that 
 - `api-testing-agent`
 - `gdpr-compliance-agent`
 - `database-testing-agent`
+- `mobile-testing-agent`
 
 ## Step 3 — Dispatch the security pair sequentially
 
@@ -55,7 +58,7 @@ These two have a real dependency and must not run in parallel:
 
 Each specialist returns a JSON array of finding objects. Each object must include `id`, `severity`, `confidence`, `exploitability`, `proof_quality`, `issue`, `impact`, `evidence`, `how_to_replicate`, and `recommendation`. If an older specialist omits `exploitability` or `proof_quality`, infer and add them during normalization rather than dropping the finding. Combine the arrays into one list, then:
 
-1. **Tag** each finding with the agent(s) that produced it, using these exact display names: `Functional Testing Agent`, `Non Functional Testing Agent`, `API Testing Agent`, `GDPR and Compliance Agent`, `Database Testing Agent`, `Security Attack Agent`, `Security Defence Agent`.
+1. **Tag** each finding with the agent(s) that produced it, using these exact display names: `Functional Testing Agent`, `Non Functional Testing Agent`, `API Testing Agent`, `GDPR and Compliance Agent`, `Database Testing Agent`, `Mobile Testing Agent`, `Security Attack Agent`, `Security Defence Agent`.
 2. **Deduplicate**: first merge findings with the same `id`. If IDs differ but two findings describe the same underlying root cause/location (e.g. the API agent and the Security Attack agent both flag the same missing input validation), merge them into one finding and keep the clearest/stablest ID. If an ID is missing or malformed, synthesize one from `category + location + root cause` before deduplication. Combine their `impact`/`recommendation` text if each adds distinct value, and join their agent names in the JSON `agents` field with " + " for the HTML display. If merged findings disagree on `exploitability`, choose the most realistic access level actually supported by the evidence, not the scariest wording. If they disagree on `proof_quality`, choose the strongest proof level that is genuinely backed by the merged evidence.
 3. **Normalise severity**: every finding must use exactly one of `Critical`, `High`, `Medium`, `Low`, `Informational`. Fix inconsistent wording from subagents. If you change a finding's severity from what a specialist assigned it (e.g. during dedup/merge, or your own judgement call), say so explicitly in that finding's `impact` text (e.g. "originally rated X by the Y agent; normalised to Z here because ...") so the change is traceable rather than silent.
 4. **Normalise confidence**: every finding must use exactly one of `High`, `Medium`, `Low`. Use `High` for directly verified or strongly evidenced code paths, `Medium` for clear static evidence without runtime verification, and `Low` for plausible but indirect findings that still have concrete code evidence.

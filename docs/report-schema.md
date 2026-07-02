@@ -15,6 +15,7 @@ Each assessment writes a human-readable HTML report and a machine-readable JSON 
     "stack": ["Node.js", "Express"],
     "entrypoints": ["src/server.js"],
     "surfaces": ["API", "database", "auth"],
+    "mobile_signals": [],
     "key_paths": ["src/routes", "src/models", "migrations"],
     "available_specs": ["README.md"],
     "skip_hints": []

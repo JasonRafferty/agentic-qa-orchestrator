@@ -1,12 +1,12 @@
 # agentic-qa-orchestrator
 
-A Claude Code multi-agent QA system. Point it at an application's source code you own, and it runs a full quality assessment — functional, non-functional, API, GDPR/compliance, database, and offensive + defensive security review — then produces prioritised HTML and JSON reports.
+A Claude Code multi-agent QA system. Point it at an application's source code you own, and it runs a full quality assessment — functional, non-functional, API, GDPR/compliance, database, mobile, and offensive + defensive security review — then produces prioritised HTML and JSON reports.
 
 By default this is **static, read-only analysis**. If you explicitly authorize dynamic testing, specialists may run the app and supporting services locally, preferably in isolated Docker containers, and send traffic only to localhost/loopback targets. They must never modify the target app or send traffic to non-localhost systems.
 
 ## How it works
 
-**`QA Test Lead`** (Opus, medium reasoning) is the orchestrator. It builds a shared Discovery Packet, conditionally dispatches seven specialist subagents, merges and deduplicates their findings, and writes the final reports.
+**`QA Test Lead`** (Opus, medium reasoning) is the orchestrator. It builds a shared Discovery Packet, conditionally dispatches eight specialist subagents, merges and deduplicates their findings, and writes the final reports.
 
 | Specialist | Focus | Model | Reasoning |
 |---|---|---|---|
@@ -15,6 +15,7 @@ By default this is **static, read-only analysis**. If you explicitly authorize d
 | `API Testing Agent` | Contracts, request/response validation, status codes, error handling, auth, data validation, integration risk | Sonnet | Medium |
 | `GDPR and Compliance Agent` | Personal data handling, consent, retention, minimisation, compliance gaps | Sonnet | Medium |
 | `Database Testing Agent` | Data integrity, relationships, constraints, migrations, seed data, transactions, database-driven business rules — can run live against an isolated local database when dynamic testing is authorized | Sonnet | Medium |
+| `Mobile Testing Agent` | Android/iOS realities: mobile security, privacy, WebView/token storage, deep links, permissions, offline/resume, proxy/request tampering, UX/accessibility | Sonnet | High |
 | `Security Attack Agent` | Vulnerabilities, abuse cases, injection, auth/authorization weaknesses, exposed data (red team) | Sonnet | High |
 | `Security Defence Agent` | Mitigations and preventative controls, reviewing the Attack Agent's findings (blue team) | Sonnet | High |
 
@@ -52,7 +53,7 @@ The HTML report includes:
 
 ```
 agentic-qa-orchestrator/
-├── .claude/agents/           # Subagent definitions (the QA Test Lead + 7 specialists)
+├── .claude/agents/           # Subagent definitions (the QA Test Lead + 8 specialists)
 ├── templates/
 │   └── report-template.html  # The HTML shell the QA Test Lead fills in per run
 ├── reports/                  # Generated reports (gitignored)
