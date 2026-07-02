@@ -67,7 +67,7 @@ Each specialist returns an 8-column markdown table (`ID | Severity | Confidence 
    - Only fall back to raw API calls or direct database access when there is truly no way to trigger or observe the issue through the app or browser devtools (e.g. an attack that requires writing directly to the database). In that case say so explicitly at the start of the cell (e.g. "No in-app reproduction exists for this issue — it requires direct database/API access.") and, where possible, add a secondary step a QA tester *can* do in-app once an engineer has done the initial setup (e.g. "once you have a forged session token from engineering, paste it into Local Storage in the browser and confirm the app logs you straight in as that user without ever showing the sign-in screen").
    - Always include concrete inputs (exact screen names, field values, or payloads used) and the expected/observed result as the final step.
 
-## Step 5 — Build the HTML report
+## Step 5 — Build the reports
 
 1. Read the template at `templates/report-template.html` (relative to this project's root — i.e. `qa-orchestrator/templates/report-template.html`).
 2. Fill in its placeholders:
@@ -94,11 +94,13 @@ Each specialist returns an 8-column markdown table (`ID | Severity | Confidence 
      ```
      (severity class/badge text must be lowercase for the CSS class, e.g. `informational`, and Title Case for the visible badge label. Add a second class `static` to the evidence `<td>`, e.g. `<td class="evidence static">`, when that row's Evidence cell says "static analysis only" — this dims/italicises it visually per the template CSS so live-verified rows stand out.)
    - **HTML-escape every piece of dynamic text before inserting it** — this includes `{{APP_NAME}}`, `{{APP_PATH}}`, `{{EXEC_SUMMARY}}`, and every cell of every finding row (ID, Issue, Impact, Evidence, Confidence, How to Replicate, Recommendation). Specialist findings routinely contain literal `<`, `>`, `&`, or `"` (e.g. describing an unescaped `<script>` payload) — replace `&` → `&amp;`, `<` → `&lt;`, `>` → `&gt;`, `"` → `&quot;` in that order before writing the value into the HTML. Never let a finding's text be interpreted as markup.
-3. Write the completed HTML to `reports/<YYYY-MM-DD>_<app-name-kebab-case>.html` (relative to this project's root). The `reports/` folder already exists. If a file with that exact name already exists (e.g. a second run against the same app on the same day), do not overwrite it — append `_2`, `_3`, etc. (or an `HH-MM` time suffix) before the `.html` extension to get a free filename, and mention the disambiguated name back to the user in Step 6.
+3. Write the completed HTML to `reports/<YYYY-MM-DD>_<app-name-kebab-case>.html` (relative to this project's root). The `reports/` folder already exists. If a file with that exact name already exists (e.g. a second run against the same app on the same day), do not overwrite it — append `_2`, `_3`, etc. (or an `HH-MM` time suffix) before the `.html` extension to get a free filename.
+4. Write the same normalized report data to `reports/<same-basename>.json`. This JSON must include: `app_name`, `app_path`, `report_date`, `dynamic_testing_authorized`, `discovery_packet`, `agents_run`, `agents_skipped`, `summary_counts`, `exec_summary`, and `findings`. Each finding object must include `id`, `severity`, `confidence`, `agents`, `issue`, `impact`, `evidence`, `how_to_replicate`, and `recommendation`. Do not put HTML markup in the JSON values.
+5. If either filename was disambiguated, use the same basename for both `.html` and `.json`, and mention both paths back to the user in Step 6.
 
 ## Step 6 — Report back to the user
 
-In the chat, give a short summary: report file path, total findings broken down by severity, and the top 3 most critical issues by name. Do not paste the entire table into the chat — the HTML file is the deliverable.
+In the chat, give a short summary: HTML report path, JSON report path, total findings broken down by severity, and the top 3 most critical issues by name. Do not paste the entire table into the chat — the HTML and JSON files are the deliverables.
 
 ## Rules
 
