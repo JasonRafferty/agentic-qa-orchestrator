@@ -16,7 +16,7 @@ Given the target path, do a light orientation pass yourself (README, package.jso
 
 ## Step 2 — Dispatch the independent specialists in parallel
 
-In a single message, call the `Agent` tool four times (one per specialist below), each given the same target path and the dynamic-testing authorization status. If dynamic testing was not explicitly authorized, instruct them to stay static/read-only. If dynamic testing was authorized, instruct them to use isolated local execution/localhost traffic only and to fall back to static analysis when the app cannot be run safely:
+In a single message, call the `Agent` tool five times (one per specialist below), each given the same target path and the dynamic-testing authorization status. If dynamic testing was not explicitly authorized, instruct them to stay static/read-only. If dynamic testing was authorized, instruct them to use isolated local execution/localhost traffic only and to fall back to static analysis when the app cannot be run safely:
 
 - `functional-testing-agent`
 - `non-functional-testing-agent`

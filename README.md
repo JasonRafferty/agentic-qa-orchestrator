@@ -6,7 +6,7 @@ This is primarily **static, read-only analysis** — most agents work purely by 
 
 ## How it works
 
-**`QA Test Lead`** (Opus, medium reasoning) is the orchestrator. It dispatches six specialist subagents, merges and deduplicates their findings, and writes the final report.
+**`QA Test Lead`** (Opus, medium reasoning) is the orchestrator. It dispatches seven specialist subagents, merges and deduplicates their findings, and writes the final report.
 
 | Specialist | Focus | Model | Reasoning |
 |---|---|---|---|
@@ -41,7 +41,7 @@ Each run produces `reports/<date>_<app-name>.html` — a self-contained HTML fil
 
 ```
 qa-orchestrator/
-├── .claude/agents/           # Subagent definitions (the QA Test Lead + 6 specialists)
+├── .claude/agents/           # Subagent definitions (the QA Test Lead + 7 specialists)
 ├── templates/
 │   └── report-template.html  # The HTML shell the QA Test Lead fills in per run
 ├── reports/                  # Generated reports (gitignored)
