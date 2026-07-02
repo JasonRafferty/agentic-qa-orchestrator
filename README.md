@@ -62,6 +62,8 @@ agentic-qa-orchestrator/
 
 See [`docs/adding-a-new-agent.md`](docs/adding-a-new-agent.md) — adding a new specialist is one new agent file plus wiring it into the QA Test Lead's dispatch list.
 
+For the machine-readable output shape, see [`docs/report-schema.md`](docs/report-schema.md).
+
 ## Notes
 
 - Only point this at code you own or are authorised to review — the Security Attack Agent reasons about real exploit paths, which is only appropriate for authorised review of your own application.
