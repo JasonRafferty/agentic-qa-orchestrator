@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QA Report — {{APP_NAME}}</title>
+<style>
+  :root {
+    --critical: #b91c1c;
+    --high: #ea580c;
+    --medium: #ca8a04;
+    --low: #2563eb;
+    --info: #6b7280;
+    --bg: #f7f7f8;
+    --panel: #ffffff;
+    --border: #e5e7eb;
+    --text: #1f2937;
+    --text-muted: #6b7280;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+  header {
+    background: #111827;
+    color: #f9fafb;
+    padding: 2.5rem 2rem;
+  }
+  header h1 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.75rem;
+  }
+  header .meta {
+    color: #9ca3af;
+    font-size: 0.95rem;
+  }
+  main {
+    max-width: 1200px;
+    margin: -2rem auto 3rem auto;
+    padding: 0 2rem;
+  }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 1.75rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .panel h2 {
+    margin-top: 0;
+    font-size: 1.15rem;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+  .stat {
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+  .stat .count {
+    font-size: 1.6rem;
+    font-weight: 700;
+    display: block;
+  }
+  .stat .label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+  }
+  .stat.critical { border-color: var(--critical); }
+  .stat.critical .count { color: var(--critical); }
+  .stat.high { border-color: var(--high); }
+  .stat.high .count { color: var(--high); }
+  .stat.medium { border-color: var(--medium); }
+  .stat.medium .count { color: var(--medium); }
+  .stat.low { border-color: var(--low); }
+  .stat.low .count { color: var(--low); }
+  .stat.info { border-color: var(--info); }
+  .stat.info .count { color: var(--info); }
+  .agents-run {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+  }
+  .agent-badge {
+    background: #eef2ff;
+    color: #3730a3;
+    border-radius: 999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  th, td {
+    text-align: left;
+    padding: 0.75rem 0.85rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  th {
+    background: #f3f4f6;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    position: sticky;
+    top: 0;
+  }
+  td.issue { font-weight: 600; min-width: 180px; }
+  td.replicate, td.impact, td.recommendation { min-width: 220px; white-space: pre-line; }
+  td.agent { white-space: nowrap; color: var(--text-muted); font-size: 0.85rem; }
+  .badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+  }
+  .badge.critical { background: var(--critical); }
+  .badge.high { background: var(--high); }
+  .badge.medium { background: var(--medium); }
+  .badge.low { background: var(--low); }
+  .badge.informational { background: var(--info); }
+  tr.critical td { background: #fef2f2; }
+  tr.high td { background: #fff7ed; }
+  tr.medium td { background: #fefce8; }
+  .table-wrap {
+    overflow-x: auto;
+  }
+  footer {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    padding: 1.5rem;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>QA Assessment Report</h1>
+  <div class="meta">{{APP_NAME}} &nbsp;·&nbsp; {{APP_PATH}} &nbsp;·&nbsp; Generated {{REPORT_DATE}}</div>
+</header>
+
+<main>
+
+  <section class="panel">
+    <h2>Summary</h2>
+    <p>{{EXEC_SUMMARY}}</p>
+    <div class="summary-grid">
+      <div class="stat critical"><span class="count">{{SUMMARY_CRITICAL}}</span><span class="label">Critical</span></div>
+      <div class="stat high"><span class="count">{{SUMMARY_HIGH}}</span><span class="label">High</span></div>
+      <div class="stat medium"><span class="count">{{SUMMARY_MEDIUM}}</span><span class="label">Medium</span></div>
+      <div class="stat low"><span class="count">{{SUMMARY_LOW}}</span><span class="label">Low</span></div>
+      <div class="stat info"><span class="count">{{SUMMARY_INFO}}</span><span class="label">Informational</span></div>
+    </div>
+    <div class="agents-run">
+      {{AGENT_BADGES}}
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Findings ({{SUMMARY_TOTAL}} total, highest severity first)</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Severity</th>
+            <th>Agent</th>
+            <th>Issue</th>
+            <th>Impact</th>
+            <th>How to Replicate</th>
+            <th>Recommendation</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{FINDINGS_ROWS}}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Generated by QA Test Lead &amp; specialist QA subagents — qa-orchestrator
+</footer>
+
+</body>
+</html>
