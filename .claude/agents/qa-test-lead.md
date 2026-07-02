@@ -69,7 +69,7 @@ Each specialist returns an 8-column markdown table (`ID | Severity | Confidence 
 
 ## Step 5 — Build the reports
 
-1. Read the template at `templates/report-template.html` (relative to this project's root — i.e. `qa-orchestrator/templates/report-template.html`).
+1. Read the template at `templates/report-template.html` (relative to this project's root — i.e. `agentic-qa-orchestrator/templates/report-template.html`).
 2. Fill in its placeholders:
    - `{{APP_NAME}}` — the application's name (from README/package.json, or the folder name if nothing better is available).
    - `{{APP_PATH}}` — the absolute path that was assessed.
