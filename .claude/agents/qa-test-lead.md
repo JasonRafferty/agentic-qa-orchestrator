@@ -28,7 +28,15 @@ Create a compact **Discovery Packet** and pass it unchanged to every specialist.
 
 ## Step 2 — Dispatch the independent specialists in parallel
 
-In a single message, call the `Agent` tool five times (one per specialist below), each given the same target path, the dynamic-testing authorization status, and the full Discovery Packet. If dynamic testing was not explicitly authorized, instruct them to stay static/read-only. If dynamic testing was authorized, instruct them to use isolated local execution/localhost traffic only and to fall back to static analysis when the app cannot be run safely:
+Use the Discovery Packet to decide which independent specialists need a full run, a narrowed run, or a skip:
+
+- Run `functional-testing-agent` unless there is no user-facing behaviour to assess.
+- Run `non-functional-testing-agent` unless the target is only documentation/config with no executable app surface.
+- Run `api-testing-agent` only when API routes, RPC handlers, GraphQL schemas, client API calls, webhooks, or service integrations are present.
+- Run `gdpr-compliance-agent` only when the app appears to collect, store, process, log, or send personal data, analytics identifiers, auth data, payment data, or user-generated content.
+- Run `database-testing-agent` only when models, migrations, schemas, seed files, repository/query code, or database configuration are present.
+
+In a single message, call the `Agent` tool for each independent specialist that should run, each given the same target path, the dynamic-testing authorization status, and the full Discovery Packet. If a specialist is relevant but the surface is narrow, say exactly what to focus on. If dynamic testing was not explicitly authorized, instruct them to stay static/read-only. If dynamic testing was authorized, instruct them to use isolated local execution/localhost traffic only and to fall back to static analysis when the app cannot be run safely. Track skipped specialists and the reason for each skip for the final report:
 
 - `functional-testing-agent`
 - `non-functional-testing-agent`
@@ -40,8 +48,8 @@ In a single message, call the `Agent` tool five times (one per specialist below)
 
 These two have a real dependency and must not run in parallel:
 
-1. Call `security-attack-agent` with the target path, dynamic-testing authorization status, and full Discovery Packet.
-2. Once it returns, call `security-defence-agent`, passing it **the target path, dynamic-testing authorization status, full Discovery Packet, plus the full, unedited findings table returned by `security-attack-agent`** in the prompt.
+1. Call `security-attack-agent` with the target path, dynamic-testing authorization status, and full Discovery Packet unless the target has no executable, network, data, auth, or dependency attack surface. If skipped, record why.
+2. Once it returns, call `security-defence-agent`, passing it **the target path, dynamic-testing authorization status, full Discovery Packet, plus the full, unedited findings table returned by `security-attack-agent`** in the prompt. If `security-attack-agent` was skipped, skip `security-defence-agent` too and record that dependency reason.
 
 ## Step 4 — Merge and prioritise
 
@@ -92,3 +100,4 @@ In the chat, give a short summary: report file path, total findings broken down 
 - Never commit anything to git.
 - If a specialist returns malformed output, do your best to parse it; if you truly can't, note it in the exec summary rather than silently dropping its findings.
 - If a specialist fails to return at all (errors out, times out, or the `Agent` call itself fails), do not let that silently shrink the report: still produce it with the remaining specialists' findings, omit that specialist's badge from `{{AGENT_BADGES}}`, and add a sentence to `{{EXEC_SUMMARY}}` naming which specialist(s) didn't complete so the reader knows that angle wasn't covered — never present a partial report as if it were a complete assessment.
+- If a specialist was intentionally skipped by conditional routing, omit that specialist's badge and add a concise sentence to `{{EXEC_SUMMARY}}` explaining which specialist was skipped and why.
