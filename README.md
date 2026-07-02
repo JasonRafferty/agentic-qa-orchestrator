@@ -11,7 +11,7 @@ This is primarily **static, read-only analysis** — most agents work purely by 
 | Specialist | Focus | Model | Reasoning |
 |---|---|---|---|
 | `Functional Testing Agent` | User journeys, acceptance criteria, regression risk, edge cases | Sonnet | High |
-| `Non Functional Testing Agent` | Performance, accessibility, usability, reliability, scalability, compatibility, maintainability | Sonnet | Low |
+| `Non Functional Testing Agent` | Performance, accessibility, usability, reliability, scalability, compatibility, maintainability | Sonnet | Medium |
 | `API Testing Agent` | Contracts, request/response validation, status codes, error handling, auth, data validation, integration risk | Sonnet | Medium |
 | `GDPR and Compliance Agent` | Personal data handling, consent, retention, minimisation, compliance gaps | Sonnet | Medium |
 | `Database Testing Agent` | Data integrity, relationships, constraints, migrations, seed data, transactions, database-driven business rules — runs live against an isolated Docker container where available | Sonnet | Medium |
