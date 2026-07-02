@@ -1,4 +1,4 @@
-# qa-orchestrator
+# agentic-qa-orchestrator
 
 A Claude Code multi-agent QA system. Point it at an application's source code you own, and it runs a full quality assessment — functional, non-functional, API, GDPR/compliance, and offensive + defensive security review — then produces a single prioritised HTML report.
 
