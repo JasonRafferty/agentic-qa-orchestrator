@@ -1,12 +1,12 @@
 # agentic-qa-orchestrator
 
-A Claude Code multi-agent QA system. Point it at an application's source code you own, and it runs a full quality assessment — functional, non-functional, API, GDPR/compliance, and offensive + defensive security review — then produces a single prioritised HTML report.
+A Claude Code multi-agent QA system. Point it at an application's source code you own, and it runs a full quality assessment — functional, non-functional, API, GDPR/compliance, database, and offensive + defensive security review — then produces prioritised HTML and JSON reports.
 
-This is primarily **static, read-only analysis** — most agents work purely by reading source code, and nothing is run, built, deployed, or sent live traffic. The one exception is the `Database Testing Agent`, which, where Docker is available, spins up the application's database in an isolated container to verify migrations, seed data, and query correctness.
+By default this is **static, read-only analysis**. If you explicitly authorize dynamic testing, specialists may run the app and supporting services locally, preferably in isolated Docker containers, and send traffic only to localhost/loopback targets. They must never modify the target app or send traffic to non-localhost systems.
 
 ## How it works
 
-**`QA Test Lead`** (Opus, medium reasoning) is the orchestrator. It dispatches seven specialist subagents, merges and deduplicates their findings, and writes the final report.
+**`QA Test Lead`** (Opus, medium reasoning) is the orchestrator. It builds a shared Discovery Packet, conditionally dispatches seven specialist subagents, merges and deduplicates their findings, and writes the final reports.
 
 | Specialist | Focus | Model | Reasoning |
 |---|---|---|---|
@@ -18,7 +18,7 @@ This is primarily **static, read-only analysis** — most agents work purely by 
 | `Security Attack Agent` | Vulnerabilities, abuse cases, injection, auth/authorization weaknesses, exposed data (red team) | Sonnet | High |
 | `Security Defence Agent` | Mitigations and preventative controls, reviewing the Attack Agent's findings (blue team) | Sonnet | High |
 
-Orchestration order: `Functional`, `Non Functional`, `API`, `GDPR`, and `Database` run in parallel (they're independent). `Security Attack` then runs, and its findings are fed into `Security Defence`, which must run after it.
+Orchestration order: the QA Test Lead first builds a shared Discovery Packet, then conditionally runs relevant independent specialists in parallel. `Security Attack` then runs when there is an attack surface, and its findings are fed into `Security Defence`, which must run after it.
 
 ## Usage
 
@@ -26,21 +26,30 @@ Open Claude Code in this directory and ask it directly to run a QA assessment ag
 
 > Use the QA Test Lead agent to run a full QA assessment on `/home/jason/code/some-other-app`
 
-The QA Test Lead will dispatch every specialist, merge their findings, and write a report to `reports/`.
+To allow local dynamic verification:
+
+> Use the QA Test Lead agent to run a full QA assessment on `/home/jason/code/some-other-app`. Dynamic testing is authorized on localhost only.
+
+The QA Test Lead will build a shared Discovery Packet, dispatch the relevant specialists, merge their findings, and write reports to `reports/`.
 
 ## Output
 
-Each run produces `reports/<date>_<app-name>.html` — a self-contained HTML file you can open directly in a browser. It includes:
+Each run produces:
+
+- `reports/<date>_<app-name>.html` — a self-contained HTML file you can open directly in a browser.
+- `reports/<date>_<app-name>.json` — the same normalized report data for diffing, ticket creation, or automation.
+
+The HTML report includes:
 
 - A summary section (finding counts by severity, exec summary, which agents ran)
-- A single findings table, sorted highest severity to lowest, with columns: **Severity, Agent, Issue, Impact, How to Replicate, Recommendation**
+- A single findings table, sorted highest severity to lowest, with columns: **Severity, Confidence, ID, Agent, Issue, Impact, Evidence, How to Replicate, Recommendation**
 
 `reports/` is gitignored — findings are often sensitive (real vulnerabilities, compliance gaps) about whatever app you point this at, so they stay local and are never committed.
 
 ## Project structure
 
 ```
-qa-orchestrator/
+agentic-qa-orchestrator/
 ├── .claude/agents/           # Subagent definitions (the QA Test Lead + 7 specialists)
 ├── templates/
 │   └── report-template.html  # The HTML shell the QA Test Lead fills in per run
