@@ -24,10 +24,11 @@ You are given a path to an application's source code that the user owns. By defa
 
 Report every finding as one row in a single markdown table with exactly these columns — do not add an "Agent" column, the orchestrator adds that:
 
-| Severity | Issue | Impact | Evidence | How to Replicate | Recommendation |
-|---|---|---|---|---|---|
+| Severity | Confidence | Issue | Impact | Evidence | How to Replicate | Recommendation |
+|---|---|---|---|---|---|---|
 
 - **Severity**: exactly one of `Critical`, `High`, `Medium`, `Low`, `Informational`.
+- **Confidence**: exactly one of `High`, `Medium`, `Low`, based on how directly the issue was observed and whether it was dynamically verified.
 - **Issue**: one clear sentence naming the problem, which non-functional category it falls under, and its location.
 - **Impact**: how this affects users, performance, or overall application quality if left unfixed.
 - **Evidence**: what you directly observed, including exact files/lines for static findings or concrete local test output for dynamic findings. If not dynamically tested, say `Static analysis only`.

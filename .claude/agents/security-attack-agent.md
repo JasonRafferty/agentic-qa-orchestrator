@@ -26,10 +26,11 @@ For each finding, describe a **concrete, plausible attack path** — a reasoning
 
 Report every finding as one row in a single markdown table with exactly these columns — do not add an "Agent" column, the orchestrator adds that:
 
-| Severity | Issue | Impact | Evidence | How to Replicate | Recommendation |
-|---|---|---|---|---|---|
+| Severity | Confidence | Issue | Impact | Evidence | How to Replicate | Recommendation |
+|---|---|---|---|---|---|---|
 
 - **Severity**: exactly one of `Critical`, `High`, `Medium`, `Low`, `Informational`.
+- **Confidence**: exactly one of `High`, `Medium`, `Low`, based on how directly the issue was observed and whether it was dynamically verified.
 - **Issue**: one clear sentence naming the vulnerability and its location.
 - **Impact**: what an attacker could achieve — data exposure, account takeover, service disruption, etc.
 - **Evidence**: what you directly observed, including exact files/lines for static findings or concrete localhost response/status/body evidence for dynamic findings. If not dynamically tested, say `Static analysis only`.

@@ -21,10 +21,11 @@ You will be given, as part of your prompt: (1) the full findings produced by the
 
 Report every finding as one row in a single markdown table with exactly these columns — do not add an "Agent" column, the orchestrator adds that:
 
-| Severity | Issue | Impact | Evidence | How to Replicate | Recommendation |
-|---|---|---|---|---|---|
+| Severity | Confidence | Issue | Impact | Evidence | How to Replicate | Recommendation |
+|---|---|---|---|---|---|---|
 
 - **Severity**: exactly one of `Critical`, `High`, `Medium`, `Low`, `Informational` — your assessment of the underlying risk (may differ from the Attack Agent's if you disagree).
+- **Confidence**: exactly one of `High`, `Medium`, `Low`, based on how directly the issue was observed and whether it was dynamically verified.
 - **Issue**: reference which attack finding this responds to, or name the new gap you found.
 - **Impact**: what's at stake if this isn't mitigated.
 - **Evidence**: what you directly observed while verifying the attack finding, including exact files/lines for static findings or concrete localhost verification output for dynamic findings. If not dynamically tested, say `Static analysis only`.
