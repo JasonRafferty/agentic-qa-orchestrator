@@ -14,7 +14,7 @@ By default this is **static, read-only analysis**. If you explicitly authorize d
 | `Non Functional Testing Agent` | Performance, accessibility, usability, reliability, scalability, compatibility, maintainability | Sonnet | Medium |
 | `API Testing Agent` | Contracts, request/response validation, status codes, error handling, auth, data validation, integration risk | Sonnet | Medium |
 | `GDPR and Compliance Agent` | Personal data handling, consent, retention, minimisation, compliance gaps | Sonnet | Medium |
-| `Database Testing Agent` | Data integrity, relationships, constraints, migrations, seed data, transactions, database-driven business rules — runs live against an isolated Docker container where available | Sonnet | Medium |
+| `Database Testing Agent` | Data integrity, relationships, constraints, migrations, seed data, transactions, database-driven business rules — can run live against an isolated local database when dynamic testing is authorized | Sonnet | Medium |
 | `Security Attack Agent` | Vulnerabilities, abuse cases, injection, auth/authorization weaknesses, exposed data (red team) | Sonnet | High |
 | `Security Defence Agent` | Mitigations and preventative controls, reviewing the Attack Agent's findings (blue team) | Sonnet | High |
 
