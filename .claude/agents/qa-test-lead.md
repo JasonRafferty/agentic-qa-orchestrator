@@ -45,7 +45,7 @@ These two have a real dependency and must not run in parallel:
 
 ## Step 4 — Merge and prioritise
 
-Each specialist returns a 5-column markdown table (`Severity | Issue | Impact | How to Replicate | Recommendation`). Combine them into one list, then:
+Each specialist returns a 6-column markdown table (`Severity | Issue | Impact | Evidence | How to Replicate | Recommendation`). Combine them into one list, then:
 
 1. **Tag** each row with the agent(s) that produced it, using these exact display names: `Functional Testing Agent`, `Non Functional Testing Agent`, `API Testing Agent`, `GDPR and Compliance Agent`, `Database Testing Agent`, `Security Attack Agent`, `Security Defence Agent`.
 2. **Deduplicate**: if two rows describe the same underlying root cause/location (e.g. the API agent and the Security Attack agent both flag the same missing input validation), merge them into one row. Combine their Impact/Recommendation text if each adds distinct value, and join their names in the Agent column with " + ".
@@ -71,12 +71,13 @@ Each specialist returns a 5-column markdown table (`Severity | Issue | Impact | 
        <td class="agent">Security Attack Agent</td>
        <td class="issue">...</td>
        <td class="impact">...</td>
+       <td class="evidence">...</td>
        <td class="replicate">...</td>
        <td class="recommendation">...</td>
      </tr>
      ```
-     (severity class/badge text must be lowercase for the CSS class, e.g. `informational`, and Title Case for the visible badge label.)
-   - **HTML-escape every piece of dynamic text before inserting it** — this includes `{{APP_NAME}}`, `{{APP_PATH}}`, `{{EXEC_SUMMARY}}`, and every cell of every finding row (Issue, Impact, How to Replicate, Recommendation). Specialist findings routinely contain literal `<`, `>`, `&`, or `"` (e.g. describing an unescaped `<script>` payload) — replace `&` → `&amp;`, `<` → `&lt;`, `>` → `&gt;`, `"` → `&quot;` in that order before writing the value into the HTML. Never let a finding's text be interpreted as markup.
+     (severity class/badge text must be lowercase for the CSS class, e.g. `informational`, and Title Case for the visible badge label. Add a second class `static` to the evidence `<td>`, e.g. `<td class="evidence static">`, when that row's Evidence cell says "static analysis only" — this dims/italicises it visually per the template CSS so live-verified rows stand out.)
+   - **HTML-escape every piece of dynamic text before inserting it** — this includes `{{APP_NAME}}`, `{{APP_PATH}}`, `{{EXEC_SUMMARY}}`, and every cell of every finding row (Issue, Impact, Evidence, How to Replicate, Recommendation). Specialist findings routinely contain literal `<`, `>`, `&`, or `"` (e.g. describing an unescaped `<script>` payload) — replace `&` → `&amp;`, `<` → `&lt;`, `>` → `&gt;`, `"` → `&quot;` in that order before writing the value into the HTML. Never let a finding's text be interpreted as markup.
 3. Write the completed HTML to `reports/<YYYY-MM-DD>_<app-name-kebab-case>.html` (relative to this project's root). The `reports/` folder already exists. If a file with that exact name already exists (e.g. a second run against the same app on the same day), do not overwrite it — append `_2`, `_3`, etc. (or an `HH-MM` time suffix) before the `.html` extension to get a free filename, and mention the disambiguated name back to the user in Step 6.
 
 ## Step 6 — Report back to the user

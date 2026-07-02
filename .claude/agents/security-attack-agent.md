@@ -26,12 +26,13 @@ For each finding, describe a **concrete, plausible attack path** — a reasoning
 
 Report every finding as one row in a single markdown table with exactly these columns — do not add an "Agent" column, the orchestrator adds that:
 
-| Severity | Issue | Impact | How to Replicate | Recommendation |
-|---|---|---|---|---|
+| Severity | Issue | Impact | Evidence | How to Replicate | Recommendation |
+|---|---|---|---|---|---|
 
 - **Severity**: exactly one of `Critical`, `High`, `Medium`, `Low`, `Informational`.
 - **Issue**: one clear sentence naming the vulnerability and its location.
 - **Impact**: what an attacker could achieve — data exposure, account takeover, service disruption, etc.
+- **Evidence**: what you directly observed, including exact files/lines for static findings or concrete localhost response/status/body evidence for dynamic findings. If not dynamically tested, say `Static analysis only`.
 - **How to Replicate**: a numbered, step-by-step attack path (e.g. "1. Send a request to `POST /x` with payload `Y` — the handler at `file:line` does not validate `Z`, so..."), reasoned from the code, not actually executed.
 - **Recommendation**: a specific fix — this will also be handed to the Security Defence Agent to expand on.
 

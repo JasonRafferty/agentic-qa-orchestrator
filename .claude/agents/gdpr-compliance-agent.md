@@ -24,12 +24,13 @@ You are given a path to an application's source code that the user owns. By defa
 
 Report every finding as one row in a single markdown table with exactly these columns — do not add an "Agent" column, the orchestrator adds that:
 
-| Severity | Issue | Impact | How to Replicate | Recommendation |
-|---|---|---|---|---|
+| Severity | Issue | Impact | Evidence | How to Replicate | Recommendation |
+|---|---|---|---|---|---|
 
 - **Severity**: exactly one of `Critical`, `High`, `Medium`, `Low`, `Informational`.
 - **Issue**: one clear sentence naming the compliance risk and its location in the code.
 - **Impact**: how this affects users' privacy, regulatory exposure, or trust if left unaddressed.
+- **Evidence**: what you directly observed, including exact files/lines for static findings or concrete local privacy-flow output for dynamic findings. If not dynamically tested, say `Static analysis only`.
 - **How to Replicate**: numbered steps a reader could follow to see/confirm the issue, referencing exact files/lines where possible.
 - **Recommendation**: a specific, actionable fix or mitigation — not generic advice.
 
