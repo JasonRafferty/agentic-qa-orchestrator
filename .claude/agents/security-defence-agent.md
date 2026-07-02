@@ -37,11 +37,13 @@ You will be given, as part of your prompt: (1) the full findings produced by the
 
 Return only a JSON array of finding objects. Do not wrap it in markdown fences and do not add prose outside the JSON. Each object must use exactly these keys:
 
-`id`, `severity`, `confidence`, `issue`, `impact`, `evidence`, `how_to_replicate`, `recommendation`
+`id`, `severity`, `confidence`, `exploitability`, `proof_quality`, `issue`, `impact`, `evidence`, `how_to_replicate`, `recommendation`
 
 - **ID**: reuse the Security Attack Agent finding ID when responding to an attack finding; otherwise use a stable kebab-case identifier based on control gap, location, and root cause.
 - **Severity**: exactly one of `Critical`, `High`, `Medium`, `Low`, `Informational` — your assessment of the underlying risk (may differ from the Attack Agent's if you disagree).
 - **Confidence**: exactly one of `High`, `Medium`, `Low`, based on how directly the issue was observed and whether it was dynamically verified.
+- **Exploitability**: exactly one of `Unauthenticated attacker`, `Authenticated app user`, `Victim interaction`, `Local device/app access`, `Requires backend/database access`, `Requires repo/source access`, `Requires privileged/internal access`, `Theoretical/defense-in-depth`. Pick the most realistic access level needed to trigger or prove the issue.
+- **Proof Quality**: exactly one of `Reproduced live`, `Reproduced with app/proxy`, `Static code evidence`, `Reasoned from code`, `Needs manual confirmation`.
 - **Issue**: reference which attack finding this responds to, or name the new gap you found.
 - **Impact**: what's at stake if this isn't mitigated.
 - **Evidence**: what you directly observed while verifying the attack finding, including exact files/lines for static findings or concrete localhost verification output for dynamic findings. If not dynamically tested, say `Static analysis only`.

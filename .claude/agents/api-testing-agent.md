@@ -41,11 +41,13 @@ You are given a path to an application's source code that the user owns. By defa
 
 Return only a JSON array of finding objects. Do not wrap it in markdown fences and do not add prose outside the JSON. Each object must use exactly these keys:
 
-`id`, `severity`, `confidence`, `issue`, `impact`, `evidence`, `how_to_replicate`, `recommendation`
+`id`, `severity`, `confidence`, `exploitability`, `proof_quality`, `issue`, `impact`, `evidence`, `how_to_replicate`, `recommendation`
 
 - **ID**: stable kebab-case identifier based on category, endpoint/file, and root cause (for example `api-users-missing-auth`).
 - **Severity**: exactly one of `Critical`, `High`, `Medium`, `Low`, `Informational`.
 - **Confidence**: exactly one of `High`, `Medium`, `Low`, based on how directly the issue was observed and whether it was dynamically verified.
+- **Exploitability**: exactly one of `Unauthenticated attacker`, `Authenticated app user`, `Victim interaction`, `Local device/app access`, `Requires backend/database access`, `Requires repo/source access`, `Requires privileged/internal access`, `Theoretical/defense-in-depth`. Pick the most realistic access level needed to trigger or prove the issue.
+- **Proof Quality**: exactly one of `Reproduced live`, `Reproduced with app/proxy`, `Static code evidence`, `Reasoned from code`, `Needs manual confirmation`.
 - **Issue**: one clear sentence naming the problem and the endpoint/file it occurs in.
 - **Impact**: how this affects API consumers, data integrity, security, or overall quality if left unfixed.
 - **Evidence**: what you directly observed, including exact files/lines for static findings or concrete localhost response/status/body evidence for dynamic findings. If not dynamically tested, say `Static analysis only`.

@@ -40,6 +40,8 @@ Each assessment writes a human-readable HTML report and a machine-readable JSON 
       "id": "api-users-missing-auth",
       "severity": "High",
       "confidence": "High",
+      "exploitability": "Unauthenticated attacker",
+      "proof_quality": "Static code evidence",
       "agents": ["API Testing Agent", "Security Attack Agent"],
       "issue": "POST /users does not require authentication.",
       "impact": "An unauthenticated user can create accounts without approval.",
@@ -56,6 +58,8 @@ Required finding values:
 - `id`: stable kebab-case identifier based on category, location, and root cause.
 - `severity`: one of `Critical`, `High`, `Medium`, `Low`, `Informational`.
 - `confidence`: one of `High`, `Medium`, `Low`.
+- `exploitability`: one of `Unauthenticated attacker`, `Authenticated app user`, `Victim interaction`, `Local device/app access`, `Requires backend/database access`, `Requires repo/source access`, `Requires privileged/internal access`, `Theoretical/defense-in-depth`.
+- `proof_quality`: one of `Reproduced live`, `Reproduced with app/proxy`, `Static code evidence`, `Reasoned from code`, `Needs manual confirmation`.
 - `agents`: one or more specialist display names.
 - `issue`, `impact`, `evidence`, `how_to_replicate`, `recommendation`: non-empty strings.
 

@@ -42,11 +42,13 @@ For each finding, describe a **concrete, plausible attack path** — a reasoning
 
 Return only a JSON array of finding objects. Do not wrap it in markdown fences and do not add prose outside the JSON. Each object must use exactly these keys:
 
-`id`, `severity`, `confidence`, `issue`, `impact`, `evidence`, `how_to_replicate`, `recommendation`
+`id`, `severity`, `confidence`, `exploitability`, `proof_quality`, `issue`, `impact`, `evidence`, `how_to_replicate`, `recommendation`
 
 - **ID**: stable kebab-case identifier based on vulnerability class, location, and root cause (for example `security-admin-idor`).
 - **Severity**: exactly one of `Critical`, `High`, `Medium`, `Low`, `Informational`.
 - **Confidence**: exactly one of `High`, `Medium`, `Low`, based on how directly the issue was observed and whether it was dynamically verified.
+- **Exploitability**: exactly one of `Unauthenticated attacker`, `Authenticated app user`, `Victim interaction`, `Local device/app access`, `Requires backend/database access`, `Requires repo/source access`, `Requires privileged/internal access`, `Theoretical/defense-in-depth`. Pick the most realistic access level needed to trigger or prove the issue.
+- **Proof Quality**: exactly one of `Reproduced live`, `Reproduced with app/proxy`, `Static code evidence`, `Reasoned from code`, `Needs manual confirmation`.
 - **Issue**: one clear sentence naming the vulnerability and its location.
 - **Impact**: what an attacker could achieve — data exposure, account takeover, service disruption, etc.
 - **Evidence**: what you directly observed, including exact files/lines for static findings or concrete localhost response/status/body evidence for dynamic findings. If not dynamically tested, say `Static analysis only`.

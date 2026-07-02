@@ -127,6 +127,7 @@
   td.evidence { min-width: 200px; white-space: pre-line; font-size: 0.85rem; }
   td.evidence.static { color: var(--text-muted); font-style: italic; }
   td.confidence { white-space: nowrap; color: var(--text-muted); font-weight: 600; font-size: 0.8rem; }
+  td.exploitability, td.proof-quality { min-width: 145px; color: var(--text-muted); font-weight: 600; font-size: 0.8rem; }
   td.finding-id { max-width: 160px; color: var(--text-muted); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size: 0.72rem; word-break: break-word; }
   .filters {
     display: grid;
@@ -240,6 +241,29 @@
           <option value="low">Low</option>
         </select>
       </label>
+      <label>Exploitability
+        <select id="filter-exploitability">
+          <option value="">All</option>
+          <option value="unauthenticated attacker">Unauthenticated attacker</option>
+          <option value="authenticated app user">Authenticated app user</option>
+          <option value="victim interaction">Victim interaction</option>
+          <option value="local device/app access">Local device/app access</option>
+          <option value="requires backend/database access">Requires backend/database access</option>
+          <option value="requires repo/source access">Requires repo/source access</option>
+          <option value="requires privileged/internal access">Requires privileged/internal access</option>
+          <option value="theoretical/defense-in-depth">Theoretical/defense-in-depth</option>
+        </select>
+      </label>
+      <label>Proof
+        <select id="filter-proof-quality">
+          <option value="">All</option>
+          <option value="reproduced live">Reproduced live</option>
+          <option value="reproduced with app/proxy">Reproduced with app/proxy</option>
+          <option value="static code evidence">Static code evidence</option>
+          <option value="reasoned from code">Reasoned from code</option>
+          <option value="needs manual confirmation">Needs manual confirmation</option>
+        </select>
+      </label>
       <label>Agent
         <select id="filter-agent">
           <option value="">All</option>
@@ -252,6 +276,8 @@
           <tr>
             <th>Severity</th>
             <th>Confidence</th>
+            <th>Exploitability</th>
+            <th>Proof</th>
             <th>ID</th>
             <th>Agent</th>
             <th>Issue</th>
@@ -275,6 +301,8 @@
   const search = document.getElementById("filter-search");
   const severity = document.getElementById("filter-severity");
   const confidence = document.getElementById("filter-confidence");
+  const exploitability = document.getElementById("filter-exploitability");
+  const proofQuality = document.getElementById("filter-proof-quality");
   const agent = document.getElementById("filter-agent");
 
   const agentNames = new Set();
@@ -293,23 +321,29 @@
     const query = search.value.trim().toLowerCase();
     const severityValue = severity.value;
     const confidenceValue = confidence.value;
+    const exploitabilityValue = exploitability.value;
+    const proofQualityValue = proofQuality.value;
     const agentValue = agent.value;
 
     rows.forEach((row) => {
       const rowSeverity = row.className.toLowerCase();
       const rowConfidence = row.querySelector(".confidence")?.textContent.trim().toLowerCase() || "";
+      const rowExploitability = row.querySelector(".exploitability")?.textContent.trim().toLowerCase() || "";
+      const rowProofQuality = row.querySelector(".proof-quality")?.textContent.trim().toLowerCase() || "";
       const rowAgent = row.querySelector(".agent")?.textContent.trim().toLowerCase() || "";
       const rowText = row.textContent.toLowerCase();
       const visible =
         (!query || rowText.includes(query)) &&
         (!severityValue || rowSeverity.includes(severityValue)) &&
         (!confidenceValue || rowConfidence === confidenceValue) &&
+        (!exploitabilityValue || rowExploitability === exploitabilityValue) &&
+        (!proofQualityValue || rowProofQuality === proofQualityValue) &&
         (!agentValue || rowAgent.includes(agentValue));
       row.hidden = !visible;
     });
   }
 
-  [search, severity, confidence, agent].forEach((control) => {
+  [search, severity, confidence, exploitability, proofQuality, agent].forEach((control) => {
     control.addEventListener("input", applyFilters);
     control.addEventListener("change", applyFilters);
   });

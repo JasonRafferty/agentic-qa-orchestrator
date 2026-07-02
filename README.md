@@ -43,7 +43,8 @@ The HTML report includes:
 
 - A summary section (finding counts by severity, exec summary, which agents ran)
 - An assumptions and skipped-checks section
-- A single findings table, sorted highest severity to lowest, with columns: **Severity, Confidence, ID, Agent, Issue, Impact, Evidence, How to Replicate, Recommendation**
+- A single findings table, sorted highest severity to lowest, with columns: **Severity, Confidence, Exploitability, Proof, ID, Agent, Issue, Impact, Evidence, How to Replicate, Recommendation**
+- Filters for severity, confidence, exploitability, proof quality, and agent, so realistic app-user bugs can be separated from repo/database/internal risks.
 
 `reports/` is gitignored — findings are often sensitive (real vulnerabilities, compliance gaps) about whatever app you point this at, so they stay local and are never committed.
 
