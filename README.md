@@ -65,6 +65,8 @@ See [`docs/adding-a-new-agent.md`](docs/adding-a-new-agent.md) — adding a new 
 
 For the machine-readable output shape, see [`docs/report-schema.md`](docs/report-schema.md).
 
+For assessment setup and prompt examples, see [`docs/running-a-good-assessment.md`](docs/running-a-good-assessment.md).
+
 ## Notes
 
 - Only point this at code you own or are authorised to review — the Security Attack Agent reasons about real exploit paths, which is only appropriate for authorised review of your own application.
