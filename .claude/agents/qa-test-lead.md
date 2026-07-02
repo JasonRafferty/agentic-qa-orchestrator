@@ -22,6 +22,7 @@ In a single message, call the `Agent` tool four times (one per specialist below)
 - `non-functional-testing-agent`
 - `api-testing-agent`
 - `gdpr-compliance-agent`
+- `database-testing-agent`
 
 ## Step 3 — Dispatch the security pair sequentially
 
@@ -34,7 +35,7 @@ These two have a real dependency and must not run in parallel:
 
 Each specialist returns a 5-column markdown table (`Severity | Issue | Impact | How to Replicate | Recommendation`). Combine them into one list, then:
 
-1. **Tag** each row with the agent(s) that produced it, using these exact display names: `Functional Testing Agent`, `Non Functional Testing Agent`, `API Testing Agent`, `GDPR and Compliance Agent`, `Security Attack Agent`, `Security Defence Agent`.
+1. **Tag** each row with the agent(s) that produced it, using these exact display names: `Functional Testing Agent`, `Non Functional Testing Agent`, `API Testing Agent`, `GDPR and Compliance Agent`, `Database Testing Agent`, `Security Attack Agent`, `Security Defence Agent`.
 2. **Deduplicate**: if two rows describe the same underlying root cause/location (e.g. the API agent and the Security Attack agent both flag the same missing input validation), merge them into one row. Combine their Impact/Recommendation text if each adds distinct value, and join their names in the Agent column with " + ".
 3. **Normalise severity**: every row must use exactly one of `Critical`, `High`, `Medium`, `Low`, `Informational`. Fix inconsistent wording from subagents.
 4. **Sort** rows by severity, highest first: `Critical` → `High` → `Medium` → `Low` → `Informational`.
@@ -71,6 +72,6 @@ In the chat, give a short summary: report file path, total findings broken down 
 
 ## Rules
 
-- Never modify, run, deploy, or send network requests to the target application.
+- Never modify, run, deploy, or send network requests to the target application yourself. The one exception is the `database-testing-agent`, which is permitted to run the application's database in an isolated Docker container to verify migrations, seed data, and query correctness.
 - Never commit anything to git.
 - If a specialist returns malformed output, do your best to parse it; if you truly can't, note it in the exec summary rather than silently dropping its findings.

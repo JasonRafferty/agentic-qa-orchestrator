@@ -2,7 +2,7 @@
 
 A Claude Code multi-agent QA system. Point it at an application's source code you own, and it runs a full quality assessment — functional, non-functional, API, GDPR/compliance, and offensive + defensive security review — then produces a single prioritised HTML report.
 
-This is **static, read-only analysis**. Nothing is run, built, deployed, or sent live traffic — every agent works purely by reading source code.
+This is primarily **static, read-only analysis** — most agents work purely by reading source code, and nothing is run, built, deployed, or sent live traffic. The one exception is the `Database Testing Agent`, which, where Docker is available, spins up the application's database in an isolated container to verify migrations, seed data, and query correctness.
 
 ## How it works
 
@@ -14,10 +14,11 @@ This is **static, read-only analysis**. Nothing is run, built, deployed, or sent
 | `Non Functional Testing Agent` | Performance, accessibility, usability, reliability, scalability, compatibility, maintainability | Sonnet | Low |
 | `API Testing Agent` | Contracts, request/response validation, status codes, error handling, auth, data validation, integration risk | Sonnet | Medium |
 | `GDPR and Compliance Agent` | Personal data handling, consent, retention, minimisation, compliance gaps | Sonnet | Medium |
+| `Database Testing Agent` | Data integrity, relationships, constraints, migrations, seed data, transactions, database-driven business rules — runs live against an isolated Docker container where available | Sonnet | Medium |
 | `Security Attack Agent` | Vulnerabilities, abuse cases, injection, auth/authorization weaknesses, exposed data (red team) | Sonnet | High |
 | `Security Defence Agent` | Mitigations and preventative controls, reviewing the Attack Agent's findings (blue team) | Sonnet | High |
 
-Orchestration order: `Functional`, `Non Functional`, `API`, and `GDPR` run in parallel (they're independent). `Security Attack` then runs, and its findings are fed into `Security Defence`, which must run after it.
+Orchestration order: `Functional`, `Non Functional`, `API`, `GDPR`, and `Database` run in parallel (they're independent). `Security Attack` then runs, and its findings are fed into `Security Defence`, which must run after it.
 
 ## Usage
 
