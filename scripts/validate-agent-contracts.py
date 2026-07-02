@@ -86,7 +86,7 @@ def validate_lead(path):
     require(text, "agents_skipped", path, errors)
     require(text, "dynamic_testing_authorized", path, errors)
 
-    numbered = re.findall(r"^([0-9]+)\\. \\*\\*", text, flags=re.MULTILINE)
+    numbered = re.findall(r"^([0-9]+)\. \*\*", text, flags=re.MULTILINE)
     if numbered.count("7") > 1:
         errors.append(f"{path}: duplicate numbered merge step 7")
 
