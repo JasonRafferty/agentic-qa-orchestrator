@@ -64,7 +64,8 @@ Each specialist returns a 5-column markdown table (`Severity | Issue | Impact | 
      </tr>
      ```
      (severity class/badge text must be lowercase for the CSS class, e.g. `informational`, and Title Case for the visible badge label.)
-3. Write the completed HTML to `reports/<YYYY-MM-DD>_<app-name-kebab-case>.html` (relative to this project's root). The `reports/` folder already exists.
+   - **HTML-escape every piece of dynamic text before inserting it** — this includes `{{APP_NAME}}`, `{{APP_PATH}}`, `{{EXEC_SUMMARY}}`, and every cell of every finding row (Issue, Impact, How to Replicate, Recommendation). Specialist findings routinely contain literal `<`, `>`, `&`, or `"` (e.g. describing an unescaped `<script>` payload) — replace `&` → `&amp;`, `<` → `&lt;`, `>` → `&gt;`, `"` → `&quot;` in that order before writing the value into the HTML. Never let a finding's text be interpreted as markup.
+3. Write the completed HTML to `reports/<YYYY-MM-DD>_<app-name-kebab-case>.html` (relative to this project's root). The `reports/` folder already exists. If a file with that exact name already exists (e.g. a second run against the same app on the same day), do not overwrite it — append `_2`, `_3`, etc. (or an `HH-MM` time suffix) before the `.html` extension to get a free filename, and mention the disambiguated name back to the user in Step 6.
 
 ## Step 6 — Report back to the user
 
@@ -75,3 +76,4 @@ In the chat, give a short summary: report file path, total findings broken down 
 - Never modify, run, deploy, or send network requests to the target application yourself. The one exception is the `database-testing-agent`, which is permitted to run the application's database in an isolated Docker container to verify migrations, seed data, and query correctness.
 - Never commit anything to git.
 - If a specialist returns malformed output, do your best to parse it; if you truly can't, note it in the exec summary rather than silently dropping its findings.
+- If a specialist fails to return at all (errors out, times out, or the `Agent` call itself fails), do not let that silently shrink the report: still produce it with the remaining specialists' findings, omit that specialist's badge from `{{AGENT_BADGES}}`, and add a sentence to `{{EXEC_SUMMARY}}` naming which specialist(s) didn't complete so the reader knows that angle wasn't covered — never present a partial report as if it were a complete assessment.
