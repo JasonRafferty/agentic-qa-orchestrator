@@ -34,9 +34,10 @@ For each finding, describe a **concrete, plausible attack path** — a reasoning
 
 Report every finding as one row in a single markdown table with exactly these columns — do not add an "Agent" column, the orchestrator adds that:
 
-| Severity | Confidence | Issue | Impact | Evidence | How to Replicate | Recommendation |
-|---|---|---|---|---|---|---|
+| ID | Severity | Confidence | Issue | Impact | Evidence | How to Replicate | Recommendation |
+|---|---|---|---|---|---|---|---|
 
+- **ID**: stable kebab-case identifier based on vulnerability class, location, and root cause (for example `security-admin-idor`).
 - **Severity**: exactly one of `Critical`, `High`, `Medium`, `Low`, `Informational`.
 - **Confidence**: exactly one of `High`, `Medium`, `Low`, based on how directly the issue was observed and whether it was dynamically verified.
 - **Issue**: one clear sentence naming the vulnerability and its location.

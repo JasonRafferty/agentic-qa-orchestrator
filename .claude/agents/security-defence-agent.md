@@ -29,9 +29,10 @@ You will be given, as part of your prompt: (1) the full findings produced by the
 
 Report every finding as one row in a single markdown table with exactly these columns — do not add an "Agent" column, the orchestrator adds that:
 
-| Severity | Confidence | Issue | Impact | Evidence | How to Replicate | Recommendation |
-|---|---|---|---|---|---|---|
+| ID | Severity | Confidence | Issue | Impact | Evidence | How to Replicate | Recommendation |
+|---|---|---|---|---|---|---|---|
 
+- **ID**: reuse the Security Attack Agent finding ID when responding to an attack finding; otherwise use a stable kebab-case identifier based on control gap, location, and root cause.
 - **Severity**: exactly one of `Critical`, `High`, `Medium`, `Low`, `Informational` — your assessment of the underlying risk (may differ from the Attack Agent's if you disagree).
 - **Confidence**: exactly one of `High`, `Medium`, `Low`, based on how directly the issue was observed and whether it was dynamically verified.
 - **Issue**: reference which attack finding this responds to, or name the new gap you found.

@@ -32,9 +32,10 @@ You are given a path to an application's source code that the user owns. By defa
 
 Report every finding as one row in a single markdown table with exactly these columns — do not add an "Agent" column, the orchestrator adds that:
 
-| Severity | Confidence | Issue | Impact | Evidence | How to Replicate | Recommendation |
-|---|---|---|---|---|---|---|
+| ID | Severity | Confidence | Issue | Impact | Evidence | How to Replicate | Recommendation |
+|---|---|---|---|---|---|---|---|
 
+- **ID**: stable kebab-case identifier based on category, data flow/location, and root cause (for example `privacy-signup-consent-missing`).
 - **Severity**: exactly one of `Critical`, `High`, `Medium`, `Low`, `Informational`.
 - **Confidence**: exactly one of `High`, `Medium`, `Low`, based on how directly the issue was observed and whether it was dynamically verified.
 - **Issue**: one clear sentence naming the compliance risk and its location in the code.
