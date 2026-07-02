@@ -22,6 +22,14 @@ You are given a path to an application's source code. By default this is a **whi
 
 For each finding, describe a **concrete, plausible attack path** — a reasoning walkthrough of how the vulnerability would be exploited — based entirely on what the code shows.
 
+## Search budget and stop rules
+
+- Use the Discovery Packet first; do not rediscover the whole repository unless the packet is clearly incomplete.
+- Prioritise externally reachable surfaces, auth/session code, authorization checks, input-to-sink paths, secrets/config, file upload, SSRF-capable integrations, and dependency manifests.
+- Ignore generated files, vendored dependencies, lockfiles, and build output unless they are directly relevant to a finding.
+- Return the top 10 security findings by exploitability and impact. Include more only for additional `Critical` or `High` issues with concrete evidence.
+- Stop once the main attack surfaces and highest-risk input-to-impact paths have been covered; do not include low-confidence theoretical attacks.
+
 ## Output format
 
 Report every finding as one row in a single markdown table with exactly these columns — do not add an "Agent" column, the orchestrator adds that:

@@ -25,6 +25,14 @@ You are given a path to an application's source code that the user owns. By defa
 4. **Data consistency issues** — orphaned records, duplicate records that should be unique, broken relationships, invalid foreign keys, incorrect query results, N+1 patterns that risk inconsistent reads.
 5. **Database-driven business rules** — constraints or triggers that are supposed to enforce business rules (e.g. uniqueness, valid state transitions) but don't, or that the application code bypasses.
 
+## Search budget and stop rules
+
+- Use the Discovery Packet first; do not rediscover the whole repository unless the packet is clearly incomplete.
+- Prioritise schemas/migrations/models, constraints, indexes, transactional business rules, seed data, and repository/query paths listed in `key_paths`.
+- Ignore generated files, vendored dependencies, lockfiles, and build output unless they are directly relevant to a finding.
+- Return the top 10 database findings by data-integrity/reliability impact. Include more only for additional `Critical` or `High` issues with concrete evidence.
+- Stop once migrations, core models, and highest-risk data mutation/query paths have been covered; do not run broad live checks beyond the authorized local scope.
+
 ## Output format
 
 Report every finding as one row in a single markdown table with exactly these columns — do not add an "Agent" column, the orchestrator adds that:

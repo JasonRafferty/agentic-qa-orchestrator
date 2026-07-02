@@ -21,6 +21,14 @@ You are given a path to an application's source code that the user owns. By defa
 7. **Data validation** — type coercion issues, unsanitized input flowing into queries/commands/templates, missing bounds/format checks.
 8. **Integration risk** — outbound calls without timeouts or retries, tight coupling between services, unclear failure propagation, missing idempotency on retried operations, missing rate limiting.
 
+## Search budget and stop rules
+
+- Use the Discovery Packet first; do not rediscover the whole repository unless the packet is clearly incomplete.
+- Prioritise externally reachable endpoints, auth/authorization boundaries, state-changing routes, file upload routes, webhooks, and integrations listed in `surfaces`.
+- Ignore generated clients, vendored dependencies, lockfiles, and build output unless they are directly relevant to a finding.
+- Return the top 10 API findings by consumer/security/data-integrity impact. Include more only for additional `Critical` or `High` issues with concrete evidence.
+- Stop once the documented API surface, route handlers, and highest-risk client/server contract paths have been covered.
+
 ## Output format
 
 Report every finding as one row in a single markdown table with exactly these columns — do not add an "Agent" column, the orchestrator adds that:

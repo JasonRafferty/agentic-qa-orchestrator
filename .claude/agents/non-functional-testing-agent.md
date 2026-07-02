@@ -20,6 +20,14 @@ You are given a path to an application's source code that the user owns. By defa
 - **Compatibility**: browser/OS/device assumptions, hard-coded platform-specific paths, outdated polyfills or dependencies.
 - **Maintainability**: high complexity or duplication, unclear naming, missing documentation, tightly coupled modules, outdated dependencies, config mixed in with code.
 
+## Search budget and stop rules
+
+- Use the Discovery Packet first; do not rediscover the whole repository unless the packet is clearly incomplete.
+- Prioritise user-facing performance/accessibility risks, reliability issues on hot paths, and scalability risks in shared infrastructure.
+- Ignore generated files, vendored dependencies, lockfiles, and build output unless they are directly relevant to a finding.
+- Return the top 10 non-functional findings by likely production impact. Include more only for additional `Critical` or `High` issues with concrete evidence.
+- Stop once the major app surfaces and highest-risk non-functional categories have been covered; do not keep scanning for cosmetic or preference-level concerns.
+
 ## Output format
 
 Report every finding as one row in a single markdown table with exactly these columns — do not add an "Agent" column, the orchestrator adds that:

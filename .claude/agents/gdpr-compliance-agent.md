@@ -20,6 +20,14 @@ You are given a path to an application's source code that the user owns. By defa
 - **Third-party sharing** — calls to analytics/ads/marketing SDKs or external APIs that receive personal data, without clear justification or data-processor boundaries.
 - **User rights** — is there any support for data export, deletion ("right to be forgotten"), or access requests?
 
+## Search budget and stop rules
+
+- Use the Discovery Packet first; do not rediscover the whole repository unless the packet is clearly incomplete.
+- Prioritise data collection, auth/account flows, analytics/marketing integrations, logging/error handling, exports/deletion, and persistence paths.
+- Ignore generated files, vendored dependencies, lockfiles, and build output unless they are directly relevant to a finding.
+- Return the top 10 privacy/compliance findings by user/regulatory risk. Include more only for additional `Critical` or `High` issues with concrete evidence.
+- Stop once personal-data flows, third-party sharing, retention, and user-rights paths have been covered; do not invent compliance issues without code evidence.
+
 ## Output format
 
 Report every finding as one row in a single markdown table with exactly these columns — do not add an "Agent" column, the orchestrator adds that:

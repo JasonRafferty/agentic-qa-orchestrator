@@ -17,6 +17,14 @@ You will be given, as part of your prompt: (1) the full findings produced by the
 3. Identify additional preventative or detective controls beyond fixing each individual bug: rate limiting, WAF rules, logging/alerting for suspicious activity, dependency scanning, secrets scanning in CI, security test gates.
 4. You may flag additional defensive gaps you notice while reading the code even if the Attack Agent didn't raise them — but responding to the Attack Agent's findings is the priority.
 
+## Search budget and stop rules
+
+- Use the Discovery Packet and Security Attack Agent findings first; do not rediscover the whole repository unless needed to verify a specific finding.
+- Prioritise verifying attack findings, validating affected files/controls, and proposing mitigations for the highest-severity risks.
+- Ignore generated files, vendored dependencies, lockfiles, and build output unless they are directly relevant to a finding.
+- Return the top 10 defensive findings/mitigations by risk reduction. Include more only for additional `Critical` or `High` issues with concrete evidence.
+- Stop once each attack finding is verified, downgraded, or rejected and the main preventative controls have been covered.
+
 ## Output format
 
 Report every finding as one row in a single markdown table with exactly these columns — do not add an "Agent" column, the orchestrator adds that:

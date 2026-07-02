@@ -18,6 +18,14 @@ You are given a path to an application's source code that the user owns. By defa
 4. **Edge cases** — empty/null/zero inputs, boundary values, unusual sequences of user actions, concurrent access, partial failures mid-flow.
 5. **Broken logic** — off-by-one errors, incorrect conditionals, unhandled state transitions, dead code that should be reachable, error paths that don't actually surface an error to the user.
 
+## Search budget and stop rules
+
+- Use the Discovery Packet first; do not rediscover the whole repository unless the packet is clearly incomplete.
+- Prioritise core user journeys, auth/session flows, state-changing actions, and areas called out in `key_paths` or `available_specs`.
+- Ignore generated files, vendored dependencies, lockfiles, and build output unless they are directly relevant to a finding.
+- Return the top 10 functional findings by user/business impact. Include more only for additional `Critical` or `High` issues with concrete evidence.
+- Stop once the main journeys and highest-risk edge cases have been covered; do not keep scanning for low-value style or preference issues.
+
 ## Output format
 
 Report every finding as one row in a single markdown table with exactly these columns — do not add an "Agent" column, the orchestrator adds that:
